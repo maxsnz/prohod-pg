@@ -62,6 +62,7 @@ class App extends React.Component {
         toast.update(toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена', autoClose: 3000 });
       }
     }).catch(error => {
+      toast.update(toastPendingSync, { type: toast.TYPE.ERROR, render: `Синхронизация не завершена: ${error}` });
       console.error('error', error);
     });
   }
