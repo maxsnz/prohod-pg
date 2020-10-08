@@ -1,0 +1,19 @@
+.container {
+  position: fixed;
+  bottom: 0;
+  left: 10px;
+
+  animation-name: move;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes move {
+  from {
+    transform : translateY(100%);
+  }
+  to {
+    transform : translateY(0%);
+  }
+}

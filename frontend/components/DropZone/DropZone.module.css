@@ -1,0 +1,38 @@
+.dropZoneContainer {
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+}
+
+.dropZone {
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  font-size: 30px;
+  color: #bbb;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.dragOver {
+  border-color: #888;
+}
+
+.dragOver .text {
+  opacity: 0;
+}
+
+.fileInput {
+  position: absolute;
+  top: 0; right: 0;
+  left: 0; bottom: 0;
+  opacity: 0;
+  width: 100%;
+}

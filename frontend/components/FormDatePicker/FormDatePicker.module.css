@@ -1,0 +1,15 @@
+.formDatePickerButton {
+  height: 38px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  background: #216ba5;
+  font: inherit;
+  color: #fff;
+  cursor: pointer;
+  padding: 0 15px;
+}
+
+.formDatePickerButtonDivider {
+  padding: 0 5px;
+}

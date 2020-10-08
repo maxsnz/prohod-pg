@@ -1,0 +1,88 @@
+.container {
+  background: #2d2d2d;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+.left {
+  display: flex;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  /* font-family: Courier new, monospace; */
+  font-family: monospace;
+}
+
+.titleContainer > * {
+  margin-left: 5px;
+}
+
+.title {
+  color: #b5b5b5;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.version {
+  font-size: 12px;
+  border: 1px solid #828282;
+  color: #fff;
+  border-radius: 3px;
+  padding: 2px 6px;
+  display: block;
+  text-decoration: none;
+}
+
+.by {
+  color: #b5b5b5;
+}
+
+.ghLink {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+}
+
+.tab {
+  padding: 0 20px;
+  display: flex;
+  height: 50px;
+  color: #cccccc;
+  align-items: center;
+  border-bottom: 4px solid #2d2d2d;
+  cursor: pointer;
+  margin: 0 10px;
+  user-select: none;
+}
+
+.tab:hover {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.tab.active {
+  cursor: default;
+  border-bottom-color: #4e9fd0;
+}
+
+.tab.active:hover {
+  color: #cccccc;
+}
+
+.tab.disabled, .tab.disabled:hover {
+  cursor: default;
+  color: #cccccc;
+  border-bottom-color: #2d2d2d;
+  opacity: 0.4;
+} 

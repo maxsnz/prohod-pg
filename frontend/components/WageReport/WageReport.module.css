@@ -1,0 +1,78 @@
+.formContainer {
+  padding: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+}
+
+.formTop {
+  display: flex;
+  margin: 0 0 20px;
+}
+
+.datepickerContainer {
+  margin: 0 10px 0 0;
+}
+
+.rateInput {
+  height: 38px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  background-color: hsl(0,0%,100%);
+  border-color: hsl(0,0%,80%);
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  font: inherit;
+  cursor: pointer;
+  padding: 0 15px;
+  color: hsl(0,0%,20%);
+}
+
+.selectContainer {
+  width: 500px;
+  margin: 0 10px 0 0;
+  display: flex;
+}
+
+.select {
+  flex-grow: 1;
+  margin: 0 10px;
+}
+
+.selectArrowButton {
+  cursor: pointer;
+  border-color: hsl(0,0%,80%);
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  width: 38px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  font-family: 'Roboto', sans-serif;
+  color: #555;
+}
+
+.selectArrowButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.breaksContainer {
+  padding: 5px 0;
+}
+
+.breakItem + .breakItem {
+  margin-top: 5px;
+}
+
+.reportHeader {
+  margin-bottom: 20px;
+}

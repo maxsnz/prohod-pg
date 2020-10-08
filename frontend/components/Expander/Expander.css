@@ -1,0 +1,32 @@
+.expanderContainer {
+  margin-bottom: 20px;
+  border: 1px solid #e2e2e2;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.expanderTitle {
+  cursor: pointer;
+  user-select: none;
+  font-size: 15px;
+  position: relative;
+  background: #fff;
+  padding: 0 10px;
+  top: -15px;
+  display: inline-block;
+  left: 5px;
+}
+
+.expanderContent {
+  width: 100%;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.expanderContentExpanded {
+ /*  max-height: 1000px; */
+}
+
+.expanderContentCollapsed {
+  max-height: 0;
+} 

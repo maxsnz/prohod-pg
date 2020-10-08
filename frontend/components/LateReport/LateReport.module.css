@@ -1,0 +1,145 @@
+.container { margin-top: 20px; }
+.inner { padding: 0 20px; }
+
+.debugContainer {
+  margin-bottom: 20px;
+}
+
+.debugLabel {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+
+.debugCheckbox {
+  margin-right: 5px;
+}
+
+.nameEntry {
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  
+}
+.name {
+  margin-bottom: 5px;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+  background: #f5f5f5;
+}
+.nameData {padding: 5px;}
+.nameDates {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+}
+               
+.nameDateItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.date { 
+  color: #444;
+  margin-right: 5px; 
+}
+.time { 
+  margin-right: 5px; 
+
+  border: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  padding: 0 5px;
+  margin-right: 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #555;
+  white-space: nowrap;
+}
+.time.late {
+  border-color: red;
+  color: red;
+}
+.lateCount {color: red;}
+.entryTotal {}
+
+.nameDateItemProblem {
+  border: 1px solid rgb(216, 216, 216);
+  box-sizing: border-box;
+  padding: 0px 5px;
+  
+  border-radius: 3px;
+  font-size: 12px;
+  color: rgb(85, 85, 85);
+  background: #fff;
+  white-space: nowrap;
+  margin-right: 5px;
+  display: flex;
+  height: 20px;
+  align-items: center;
+}
+
+.breaksContainer {
+  display: flex;
+}
+
+.breakItem {
+  margin: 2px 0 2px 5px;
+}
+
+.header {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #c3c3c3;
+  padding: 0 20px;
+}
+
+.headerItem {
+  
+  height: 30px;
+  align-items: center;
+  display: flex;
+  text-align: center;
+  padding: 0 25px;
+  cursor: pointer;
+  position: relative;
+  background: #fefefe;
+  color: #737373;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #c3c3c3;
+}
+.headerItem+.headerItem {
+  /* transform: translateX(-1px); */
+}
+.headerItem:hover {
+  /* border-color: #4e9fd0; */
+  color: #4e9fd0;
+  z-index: 2;
+}
+
+.headerItemActive:hover {
+  border-color: #cacaca;
+  border-bottom-color: #fff;
+  color: #191919;
+}
+
+.headerItemActive {
+  border: 1px solid #c3c3c3;
+  cursor: default;
+  z-index: 1;
+  color: #505050;
+  border-color: #cacaca;
+  border-bottom-color: #fff;
+  background: #fff;
+  border-radius: 3px 3px 0 0px;
+}
+
+.headerItemActive:hover {
+  border-color: #cacaca;
+  border-bottom-color: #fff;
+  color: #505050;
+}
