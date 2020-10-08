@@ -1,19 +1,8 @@
-# samokat-nn
+# prohod-pg
 
-yarn db migration:create --name user-add-sms-counter
+yarn db migration:create --name data-add-list
 
-npx sequelize-cli model:generate --name Question --attributes text:string
+npx sequelize-cli model:generate --name Data --attributes data:text
 
 yarn db db:migrate
 yarn db db:migrate:undo
-
-heroku run bash
-
-heroku vim
-touch codes.txt
-vim codes.txt
-
-Esc
-:wq
-
-node seedCodes.js codes.txt
