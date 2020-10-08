@@ -35,16 +35,21 @@ class App extends React.Component {
       disabledTabs: ['wageReport', 'lateReport'],
       whiteList: whiteList || [],
       schedule,
+      workersListUpdateConfirming: false,
     };
+
+    this.toastPendingSync = null;
 
     this.onFileLoad = this.onFileLoad.bind(this);
     this.onWorkersListLoad = this.onWorkersListLoad.bind(this);
     this.onDateRangeChange = this.onDateRangeChange.bind(this);
     this.onSetCurrentTabIndex = this.onSetCurrentTabIndex.bind(this);
+    this.onWorkersListUpdateConfirmingCancel = this.onWorkersListUpdateConfirmingCancel.bind(this);
+    this.onWorkersListUpdateConfirmingOk = this.onWorkersListUpdateConfirmingOk.bind(this);
   }
 
   componentDidMount() {
-    const toastPendingSync = toast.info('Синхронизация с сервером...', { autoClose: false });
+    this.toastPendingSync = toast.info('Синхронизация с сервером...', { autoClose: false });
     api.getData().then(result => {
       const cachedData = localStorage.getItem("PROHOD_DATA");
       console.log(result);
@@ -57,12 +62,12 @@ class App extends React.Component {
         this.setState({ whiteList, schedule });
         const { localStorage } = window;
         localStorage.setItem('PROHOD_DATA', JSON.stringify({ whiteList, schedule }));
-        toast.update(toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена, данные обновлены', autoClose: 3000 });
+        toast.update(this.toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена, данные обновлены', autoClose: 3000 });
       } else {
-        toast.update(toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена', autoClose: 3000 });
+        toast.update(this.toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена', autoClose: 3000 });
       }
     }).catch(error => {
-      toast.update(toastPendingSync, { type: toast.TYPE.ERROR, render: `Синхронизация не завершена: ${error}` });
+      toast.update(this.toastPendingSync, { type: toast.TYPE.ERROR, render: `Синхронизация не завершена: ${error}` });
       console.error('error', error);
     });
   }
@@ -82,16 +87,23 @@ class App extends React.Component {
   }
 
   onWorkersListLoad({ whiteList, schedule }) {
-    const toastPendingSync = toast.info('Синхронизация с сервером...', { autoClose: false });
-    this.setState({ whiteList, schedule });
+    this.setState({ whiteList, schedule, workersListUpdateConfirming: true });
+  }
+
+  onWorkersListUpdateConfirmingCancel() {
+    this.setState({ workersListUpdateConfirming: false });
+  }
+
+  onWorkersListUpdateConfirmingOk() {
+    this.toastPendingSync = toast.info('Синхронизация с сервером...', { autoClose: false });
+    this.setState({ workersListUpdateConfirming: false });
+    const { whiteList, schedule } = this.state;
     const { localStorage } = window;
     localStorage.setItem('PROHOD_DATA', JSON.stringify({ whiteList, schedule }));
-
     api.postData({ whiteList, schedule }).then(result => {
-      toast.update(toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена, данные обновлены', autoClose: 3000 });
-      console.log('result', result);
+      toast.update(this.toastPendingSync, { type: toast.TYPE.SUCCESS, render: 'Синхронизация завершена, данные обновлены', autoClose: 3000 });
     }).catch(error => {
-      toast.update(toastPendingSync, { type: toast.TYPE.ERROR, render: 'Ошибка синхронизации' });
+      toast.update(this.toastPendingSync, { type: toast.TYPE.ERROR, render: 'Ошибка синхронизации' });
       console.error('error', error);
     });
   }
@@ -105,7 +117,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { names, data, fileLoaded, minDate, maxDate, currentTab, disabledTabs, whiteList, schedule } = this.state;
+    const { names, data, fileLoaded, minDate, maxDate, currentTab, disabledTabs, whiteList, schedule, workersListUpdateConfirming } = this.state;
 
     return (
       <div className={styles.container}>
@@ -150,6 +162,19 @@ class App extends React.Component {
               />
             )}
           </>
+        )}
+
+        {workersListUpdateConfirming && (
+          <div className={styles.popupContainer}>
+            <div className={styles.popupBlacker} />
+            <div className={styles.popup}>
+              <div className={styles.popupText}>Точно обновить данные? <br />Это действие нельзя отменить</div>
+              <div className={styles.popupActions}>
+                <div className={styles.popupButton} onClick={this.onWorkersListUpdateConfirmingCancel}>❌ Отмена</div>
+                <div className={styles.popupButton} onClick={this.onWorkersListUpdateConfirmingOk}>✅ ОК</div>
+              </div>
+            </div>
+          </div>
         )}
 
         <ToastContainer
