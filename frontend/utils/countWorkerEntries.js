@@ -84,13 +84,48 @@ const getBreaksFromSmena = smena =>
 const countTotalOutside = breaks => 
   breaks.reduce((accumulator, currentValue) => (accumulator + currentValue.breakLength), 0);
 
+// единственный признак ночной смены - разные даты начала и конца
+const dayOrNight = (smena) => {
+  const start = smena[0].timeIn;
+  const end = smena[smena.length - 1].timeOut;
+  return isDifferentDays(start, end);
+}
+
+const findSmenaStart = (smena, start) => {
+  const date = setTime(smena[0].timeIn, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 });
+  const dateStart = date;
+
+  const shouldStartAt = start ? setTime(dateStart, giveMeHoursAndMinutes(start)) : smena[0].timeIn;
+  const filterArr = smena.filter(({ timeIn, timeOut }) => (timeOut >= shouldStartAt));
+  if (filterArr && filterArr[0]) {
+    return filterArr[0].timeIn;
+  } else {
+    return smena[0].timeIn;
+  }
+}
+
+const findSmenaEnd = (smena, end) => {
+  const date = setTime(smena[smena.length - 1].timeOut, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 });
+  const dateEnd = date;
+
+  const shouldEndAt = end ? setTime(dateEnd, giveMeHoursAndMinutes(end)) : smena[smena.length - 1].timeOut;
+  const filterArr = smena.filter(({ timeIn, timeOut }) => (timeIn <= shouldEndAt));
+  if (filterArr && filterArr[0]) {
+    return filterArr[filterArr.length - 1].timeOut;
+  } else {
+    return smena[smena.length - 1].timeOut;
+  }
+}
+
 const prepareSmena = (smena, { dayStart, dayEnd, nightStart, nightEnd }, workerName) => {
   const date = setTime(smena[0].timeIn, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 });
+  const isNight = !!nightStart && !!nightEnd && dayOrNight(smena);
 
-  const smenaStart = smena[0].timeIn;
-  const smenaEnd = smena[smena.length - 1].timeOut;
-  const isNight = isDifferentDays(smenaStart, smenaEnd);
+  const smenaStart = findSmenaStart(smena, isNight ? nightStart : dayStart);
+  const smenaEnd = findSmenaEnd(smena, isNight ? nightEnd : dayEnd);
 
+  const smenaFiltered = smena.filter(({ timeIn, timeOut }) => (timeIn >= smenaStart) && (timeOut <= smenaEnd));
+  
   const dateStart = date;
   const shouldStartAt = isNight ? 
     nightStart ? setTime(dateStart, giveMeHoursAndMinutes(nightStart)) : smenaStart
@@ -114,9 +149,12 @@ const prepareSmena = (smena, { dayStart, dayEnd, nightStart, nightEnd }, workerN
   const isWeekend = isWeekendDay(date);
   const isHoliday = checkIsHoliday(date);
 
-  const breaks = getBreaksFromSmena(smena);
+  const breaks = getBreaksFromSmena(smenaFiltered);
   const totalMinutesOutside = countTotalOutside(breaks);
-  const leaveCounter = smena.length - 1;
+  const leaveCounter = smenaFiltered.length - 1;
+
+  const smenaLengthRaw = countSmenaLength(smenaFiltered) - lateOutMinutes - earlyInMinutes;
+  const smenaLength = (smenaLengthRaw >= 0) ? smenaLengthRaw : 0;
 
   return {
     workerName,
@@ -126,7 +164,7 @@ const prepareSmena = (smena, { dayStart, dayEnd, nightStart, nightEnd }, workerN
     smenaStart,
     smenaEnd,
     isNight,
-    smenaLength: countSmenaLength(smena) - lateOutMinutes - earlyInMinutes,
+    smenaLength,
     key: formatTimeAndDate(smenaStart),
     isWeekend,
     isHoliday,

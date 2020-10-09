@@ -2,12 +2,14 @@ import { uniq } from 'ramda';
 import { parseISO, min, max } from 'date-fns'
 import { isDateAfter } from './dateTimeUtils';
 import fileReadPromise from './fileReadPromise';
-import config from '../config';
 
 // genArr(13,16) => [13,14,15,16]
 const genArr = (startIndex, endIndex) => Array.from({length: endIndex}, (_, i) => i+1).slice(startIndex-1);
 
+// B7 -> 7
 const getN = key => parseInt(key.substr(1), 10);
+// B7 -> B
+const getL = key => key.substr(0, 1);
 
 const parseTimeStr = str => {
   const timeReg = /^\d\d:\d\d/;
@@ -44,6 +46,7 @@ function parseEntries(matrix) {
   const datesArr = uniqDatesStrArr.map(str => parseISO(str));
   const minDate = min(datesArr);
   const maxDate = max(datesArr);
+
   return { data: allEntriesByNames, names: uniqNamesArr, minDate, maxDate };
 }
 
@@ -53,16 +56,30 @@ function parseWorkbook(workbook) {
   const firstSheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[firstSheetName];
   const allKeysMap = Object.keys(worksheet).filter(key => key.substr(0, 1) !== '!');
+  let dateColumnLetter = null;
+  let nameColumnLetter = null;
+  let inColumnLetter = null;
+  let outColumnLetter = null;
 
   // поиск начала и конца данных на листе
   let startCellNumber = 0;
   allKeysMap.forEach(key => {
-    if (worksheet[key] && (worksheet[key].v === "Дата")) {
+    const keyValue = worksheet[key] && worksheet[key].v;
+    if (!keyValue) return;
+
+    if (keyValue === 'Дата') {
+      dateColumnLetter = getL(key);
       startCellNumber = getN(key) + 2;
+    } else if (keyValue === 'ФИО') {
+      nameColumnLetter = getL(key);
+    } else if (keyValue === 'приход') {
+      inColumnLetter = getL(key);
+    } else if (keyValue === 'уход') {
+      outColumnLetter = getL(key);
     }
   });
 
-  if (!startCellNumber) {
+  if (!(dateColumnLetter && nameColumnLetter && inColumnLetter && outColumnLetter && startCellNumber)) {
     // eslint-disable-next-line no-throw-literal
     throw 'неправильная структура таблицы';
   }
@@ -73,14 +90,14 @@ function parseWorkbook(workbook) {
 
   // составляем массив всех ячеек с данными
   const lastCellNumber = keysMap[keysMap.length - 1].substr(1);
-  const dataKeysMap = genArr(startCellNumber, lastCellNumber).map(N => `${config.NAME_COLUMN_LETTER}${N}`);
+  const dataKeysMap = genArr(startCellNumber, lastCellNumber).map(N => `${nameColumnLetter}${N}`);
 
   return dataKeysMap.map(key => {
     const index =  getN(key);
     const name = worksheet[key] ? worksheet[key].v : null;
-    const date = worksheet[`${config.DATE_COLUMN_LETTER}${index}`] ? worksheet[`${config.DATE_COLUMN_LETTER}${index}`].v : null; 
-    const timeIn = worksheet[`${config.IN_COLUMN_LETTER}${index}`] ? parseTimeStr(worksheet[`${config.IN_COLUMN_LETTER}${index}`].v) : null;
-    const timeOut = worksheet[`${config.OUT_COLUMN_LETTER}${index}`] ? parseTimeStr(worksheet[`${config.OUT_COLUMN_LETTER}${index}`].v) : null;
+    const date = worksheet[`${dateColumnLetter}${index}`] ? worksheet[`${dateColumnLetter}${index}`].v : null; 
+    const timeIn = worksheet[`${inColumnLetter}${index}`] ? parseTimeStr(worksheet[`${inColumnLetter}${index}`].v) : null;
+    const timeOut = worksheet[`${outColumnLetter}${index}`] ? parseTimeStr(worksheet[`${outColumnLetter}${index}`].v) : null;
     return { name, date, rowKey: index, timeIn, timeOut };
   });
 }

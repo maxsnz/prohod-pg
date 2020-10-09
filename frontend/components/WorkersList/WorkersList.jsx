@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Expander from '../Expander';
 import styles from './WorkersList.module.css';
 
-const WorkersList = ({ whiteList, schedule, onScheduleClear, onWhiteListClear }) => (
+const WorkersList = ({ whiteList, schedule }) => (
   <div className={styles.container}>
     {schedule && (schedule.length > 0) && (
       <Expander title="Список сотрудников" className={styles.debugPanel}>
@@ -38,7 +38,7 @@ const WorkersList = ({ whiteList, schedule, onScheduleClear, onWhiteListClear })
             ))}
           </div>
         </div>
-        <button className={styles.clearButton} onClick={onScheduleClear}>очистить</button>
+        {/*<button className={styles.clearButton} onClick={onScheduleClear}>очистить</button>*/}
       </Expander>
     )}
     {whiteList && (whiteList.length > 0) && (

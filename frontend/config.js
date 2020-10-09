@@ -1,8 +1,4 @@
 export default {
-  NAME_COLUMN_LETTER: 'C',
-  DATE_COLUMN_LETTER: 'A',
-  IN_COLUMN_LETTER: 'E',
-  OUT_COLUMN_LETTER: 'F',
   SMENA_ENDS_AFTER: 60 * 5, // смена заканчивается через 5 часов отсутствия,
   ENTRY_MAX_LENGTH: 60 * 15, // максимальное время нахождения внутри 15 часов
   DEFAULT_DAY_START: '8:00',

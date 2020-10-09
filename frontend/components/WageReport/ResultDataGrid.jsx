@@ -25,6 +25,10 @@ const ResultDataGridItem = ({
   totalMinutesOutside,
   checked,
   onSetChecked,
+  earlyInMinutes,
+  lateInMinutes,
+  earlyOutMinutes,
+  lateOutMinutes,
 }) => (
   <>
     <td className="dataTableItem">
@@ -56,14 +60,18 @@ const ResultDataGridItem = ({
     </td>
     <td className="dataTableItem">
       {isLateIn && !isInWhiteList && <div className="bgRed posAbs" />}
-      <div className="dataTableItemInner alignLeft">
+      <div className="dataTableItemInner alignJustify">
         <Time date={smenaStart} />
+        {(earlyInMinutes > 0) && <div className={styles.timeDiff}>- {parseMinutes(earlyInMinutes)}</div>}
+        {(lateInMinutes > 0) && <div className={styles.timeDiff}>+ {parseMinutes(lateInMinutes)}</div>}
       </div>
     </td>
     <td className="dataTableItem">
       {isEarlyOut && !isInWhiteList && <div className="bgRed posAbs" />}
-      <div className="dataTableItemInner alignLeft">
+      <div className="dataTableItemInner alignJustify">
         <Time date={smenaEnd} />
+        {(earlyOutMinutes > 0) && <div className={styles.timeDiff}>- {parseMinutes(earlyOutMinutes)}</div>}
+        {(lateOutMinutes > 0) && <div className={styles.timeDiff}>+ {parseMinutes(lateOutMinutes)}</div>}
       </div>
     </td>
     <td className="dataTableItem">
@@ -132,11 +140,11 @@ const ResultDataGrid = ({ data, startDate, endDate, rate, selected, workerSchedu
               <div className="bgGrey posAbs" />
               <div className="dataTableItemInner alignLeft headerCell">Ставка</div>
             </th>
-            <th className="dataTableItem" style={{ width: '100px' }}>
+            <th className="dataTableItem" style={{ width: '130px' }}>
               <div className="bgGrey posAbs" />
               <div className="dataTableItemInner alignCenter headerCell">Приход</div>
             </th>
-            <th className="dataTableItem" style={{ width: '100px' }}>
+            <th className="dataTableItem" style={{ width: '130px' }}>
               <div className="bgGrey posAbs" />
               <div className="dataTableItemInner alignCenter headerCell">Уход</div>
             </th>

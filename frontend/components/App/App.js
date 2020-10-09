@@ -5,6 +5,7 @@ import ReactHintFactory from 'react-hint'
 import 'react-hint/css/index.css';
 import api from 'api';
 import Header from '../Header';
+import ErrorBoundary from '../ErrorBoundary';
 import DropZone from '../DropZone';
 // import WhiteList from '../WhiteList';
 import WorkersList from '../WorkersList';
@@ -52,11 +53,8 @@ class App extends React.Component {
     this.toastPendingSync = toast.info('Синхронизация с сервером...', { autoClose: false });
     api.getData().then(result => {
       const cachedData = localStorage.getItem("PROHOD_DATA");
-      console.log(result);
-      console.log(cachedData);
       if (result !== cachedData) {
         const parsed = JSON.parse(result);
-        console.log('parsed', parsed);
         const { whiteList, schedule } = parsed;
 
         this.setState({ whiteList, schedule });
@@ -124,58 +122,60 @@ class App extends React.Component {
         <ReactHint autoPosition events />
         <Header currentTab={currentTab} onSetCurrentTabIndex={this.onSetCurrentTabIndex} disabledTabs={disabledTabs} />
 
-        {(currentTab === 'init') && (
-          <>
-            <DropZone onLoad={this.onFileLoad} parseFunction={parseFile} />
-          </>
-        )}
+        <ErrorBoundary>
+          {(currentTab === 'init') && (
+            <>
+              <DropZone onLoad={this.onFileLoad} parseFunction={parseFile} />
+            </>
+          )}
 
-        {(currentTab === 'workersList') && (
-          <>
-            <WorkersList schedule={schedule} whiteList={whiteList} />
-            <DropZone onLoad={this.onWorkersListLoad} parseFunction={parseWorkersList} />
-          </>
-        )}
+          {(currentTab === 'workersList') && (
+            <>
+              <WorkersList schedule={schedule} whiteList={whiteList} />
+              <DropZone onLoad={this.onWorkersListLoad} parseFunction={parseWorkersList} />
+            </>
+          )}
 
-        {(currentTab === 'wageReport') && (
-          <>
-            {fileLoaded && (names.length > 0) && (
-              <WageReport 
-                names={names} 
-                data={data} 
-                minDate={minDate}
-                maxDate={maxDate}
-                schedule={schedule || []} 
-                whiteList={whiteList || []}
-              />
-            )}
-          </>
-        )}
+          {(currentTab === 'wageReport') && (
+            <>
+              {fileLoaded && (names.length > 0) && (
+                <WageReport 
+                  names={names} 
+                  data={data} 
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  schedule={schedule || []} 
+                  whiteList={whiteList || []}
+                />
+              )}
+            </>
+          )}
 
-        {(currentTab === 'lateReport') && (
-          <>
-            {fileLoaded && (names.length > 0) && (
-              <LateReport 
-                data={data} 
-                whiteList={whiteList}
-                schedule={schedule || []}  
-              />
-            )}
-          </>
-        )}
+          {(currentTab === 'lateReport') && (
+            <>
+              {fileLoaded && (names.length > 0) && (
+                <LateReport 
+                  data={data} 
+                  whiteList={whiteList}
+                  schedule={schedule || []}  
+                />
+              )}
+            </>
+          )}
 
-        {workersListUpdateConfirming && (
-          <div className={styles.popupContainer}>
-            <div className={styles.popupBlacker} />
-            <div className={styles.popup}>
-              <div className={styles.popupText}>Точно обновить данные? <br />Это действие нельзя отменить</div>
-              <div className={styles.popupActions}>
-                <div className={styles.popupButton} onClick={this.onWorkersListUpdateConfirmingCancel}>❌ Отмена</div>
-                <div className={styles.popupButton} onClick={this.onWorkersListUpdateConfirmingOk}>✅ ОК</div>
+          {workersListUpdateConfirming && (
+            <div className={styles.popupContainer}>
+              <div className={styles.popupBlacker} />
+              <div className={styles.popup}>
+                <div className={styles.popupText}>Точно обновить данные? <br />Это действие нельзя отменить</div>
+                <div className={styles.popupActions}>
+                  <div className={styles.popupButton} onClick={this.onWorkersListUpdateConfirmingCancel}>❌ Отмена</div>
+                  <div className={styles.popupButton} onClick={this.onWorkersListUpdateConfirmingOk}>✅ ОК</div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </ErrorBoundary>
 
         <ToastContainer
           hideProgressBar

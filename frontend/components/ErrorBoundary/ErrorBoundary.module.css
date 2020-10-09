@@ -1,0 +1,7 @@
+.container {
+  padding: 10px 50px;
+}
+
+.info {color:#ea532d; font-size: 15px; margin-bottom: 10px;}
+.message {color:#ea532d; font-size: 35px; margin-bottom: 10px;}
+.errorCode { font-family: monospace; color: #1f3040; line-height: 20px; }

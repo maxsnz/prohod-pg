@@ -76,3 +76,15 @@
 .reportHeader {
   margin-bottom: 20px;
 }
+
+.timeDiff {
+  border: 1px solid rgb(216, 216, 216);
+  box-sizing: border-box;
+  padding: 0px 5px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: rgb(128 128 128);
+  background: #fff;
+  white-space: nowrap;
+  opacity: 0.6;
+}
