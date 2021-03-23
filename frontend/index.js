@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
-import * as serviceWorker from './serviceWorker';
+// import * as serviceWorker from './serviceWorker';
 
 /*
 <React.StrictMode>
@@ -16,4 +16,4 @@ ReactDOM.render(
 );
 
 // https://create-react-app.dev/docs/making-a-progressive-web-app/
-serviceWorker.register();
+// serviceWorker.register();
