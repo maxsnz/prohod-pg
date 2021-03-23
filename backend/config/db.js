@@ -15,8 +15,10 @@ module.exports = {
     host: process.env.DB_HOSTNAME,
     port: process.env.DB_PORT,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: true
+    },
     use_env_variable: "DATABASE_URL",
-    native: true,
-    ssl: true,
+    // native: true,
   }
 };
