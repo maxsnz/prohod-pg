@@ -1,6 +1,6 @@
 export default {
   SMENA_ENDS_AFTER: 60 * 5, // смена заканчивается через 5 часов отсутствия,
-  ENTRY_MAX_LENGTH: 60 * 15, // максимальное время нахождения внутри 15 часов
+  ENTRY_MAX_LENGTH: 60 * 20, // максимальное время нахождения внутри 20 часов
   DEFAULT_DAY_START: '8:00',
   DEFAULT_DAY_END: '20:00',
   DEFAULT_NIGHT_START: '20:00',
