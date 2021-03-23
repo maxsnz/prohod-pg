@@ -16,7 +16,10 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: "postgres",
     dialectOptions: {
-      ssl: true
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
     },
     use_env_variable: "DATABASE_URL",
     // native: true,
