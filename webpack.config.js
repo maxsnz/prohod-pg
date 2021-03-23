@@ -4,9 +4,9 @@ const webpack = require('webpack');
 const { version } = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCssPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -17,7 +17,7 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 
 module.exports = {
-  mode: 'development',
+  mode: isProduction ? 'production' : 'development',
   entry: {
     app: isProduction ? './frontend/index.js' : ['./frontend/index.js', 'webpack-hot-middleware/client'],
   },
@@ -85,7 +85,7 @@ module.exports = {
       },
     ]
   },
-  devtool: isProduction ? false/*'source-map'*/ : '#eval-source-map',
+  devtool: isProduction ? false/*'source-map'*/ : 'eval-source-map',
   devServer: {
     contentBase: './dist',
     historyApiFallback: true,
@@ -98,6 +98,7 @@ module.exports = {
       template: "./frontend/index.html",
       filename: "./index.html"
     }),
+    // new BundleAnalyzerPlugin(),
   ] : [
     new webpack.DefinePlugin({ "process.env.RELEASE": JSON.stringify(version) }),
     new webpack.HotModuleReplacementPlugin(),
@@ -112,37 +113,10 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   optimization: {
-    minimize: isProduction,
     minimizer: [
-      new TerserPlugin({
-        extractComments: false,
-        terserOptions: {
-          ecma: 5,
-          warnings: false,
-          parse: {},
-          compress: {},
-          mangle: true, // Note `mangle.properties` is `false` by default.
-          module: false,
-          output: {
-            comments: false,
-          },
-          toplevel: false,
-          nameCache: null,
-          ie8: false,
-          keep_classnames: undefined,
-          keep_fnames: false,
-          safari10: false,
-        },
-        sourceMap: false,
-      }),
-      new OptimizeCssPlugin({}),
+      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+      `...`,
+      new CssMinimizerPlugin(),
     ],
-    // Automatically split vendor and commons
-    // https://twitter.com/wSokra/status/969633336732905474
-    // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
-    splitChunks: {
-      chunks: 'all',
-      name: false,
-    },
   },
 };
